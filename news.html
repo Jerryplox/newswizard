@@ -1,0 +1,451 @@
+<!doctype html>
+<html lang="en">
+<head>
+   <script src="https://kit.fontawesome.com/a076d05399.js"></script> 
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-giJF6kkoqNQ00vy+HMDP7azOuL0xtbfIcaT9wjKHr8RbDVddVHyTfAAsrekwKmP1" crossorigin="anonymous">
+
+    <title>welcome to News</title>
+    <style>
+       body {background-color:#212529;}
+    </style>
+</head>
+
+<body>
+    <h1 style="text-align: center; color: azure;">News-Content <i class="far fa-newspaper"></i></h1>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="#">News-Ninja</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
+                data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false"
+                aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                    <li class="nav-item">
+                        <a class="nav-link active" aria-current="page" href="home_page.html">Home</a>
+                    </li>
+                    
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button"
+                            data-bs-toggle="dropdown" aria-expanded="false">
+                            Category
+                        </a>
+                        <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                            
+                            <li><a class="dropdown-item" href="#" id="indian-news">Indian-news</a></li>
+                             <li><a class="dropdown-item" href="#" id="economics">Economics</a></li>
+                             <li><a class="dropdown-item" href="#" id="ent">Entertainment</a></li>
+                             <li><a class="dropdown-item" href="#" id="sports">Sports</a></li>
+                             <li><a class="dropdown-item" href="#" id="tech-news">Technology</a></li>
+                             <li><a class="dropdown-item" href="#" id="business">Business</a></li>
+                        </ul>
+                    </li>
+                    
+                </ul>
+                <form class="d-flex">
+                    <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
+                    <button class="btn btn-outline-success" type="submit">Search</button>
+                </form>
+            </div>
+        </div>
+    </nav>
+    <div class="container">
+        <hr>
+        <h3 style="color: azure;">Top<span class="badge bg-secondary">News</span></h3>
+        <hr>
+        <div class="accordion" id="newsaccordion">
+            <div class="card">
+                <div class="card-header" id="headingOne">
+                    <h2 class="mb-0">
+                        <button class="btn btn-link btn-block text-left" type="button" data-toggle="collapse"
+                            data-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+                            Collapsible Group Item #1
+                        </button>
+                    </h2>
+                </div>
+
+                <div id="collapseOne" class="collapse show" aria-labelledby="headingOne"
+                    data-parent="#accordionExample">
+                    <div class="card-body">
+                        Some placeholder content for the first accordion panel. This panel is shown by default, thanks
+                        to the <code></code> class.
+                    </div>
+                </div>
+            </div>
+
+            <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/js/bootstrap.bundle.min.js"
+                integrity="sha384-ygbV9kiqUc6oa4msXn9868pTtWMgiQaeYH7/t7LECLbyPA2x65Kgf80OJFdroafW"
+                crossorigin="anonymous"></script>
+<!--<script src="news.js"></script> -->
+<script>
+    console.log('welcome to news-content')
+//api-key bdd660b70149c8ad41a9b83309f668eb
+
+let newsaccordion = document.getElementById('newsaccordion');
+
+const xhr = new XMLHttpRequest();
+xhr.open('GET', 'https://gnews.io/api/v4/search?q=example&token=bdd660b70149c8ad41a9b83309f668eb', true)
+xhr.getResponseHeader('content-type', 'application/json')
+xhr.onprogress = function () {
+    console.log('on progress')
+}
+xhr.onload = function () {
+    if (this.status === 200) {
+        let json = JSON.parse(this.responseText);
+        let newshtml = "";
+        let articles = json.articles
+        console.log(articles);
+        articles.forEach(function (element , index) {
+
+
+            // console.log(json.articles);
+
+            let news = `<div class="accordion" id="newsaccordion">
+<div class="card">
+    <div class="card-header" id="headingOne" style="background-color:;>
+        <h2 class="mb-0">
+            <button class="btn btn-link btn-block text-left" type="button" data-toggle="collapse" style = "text-decoration: none; font-size:18px;"
+                data-target="#collapse${index}" aria-expanded="true" aria-controls="collapse${index}">
+                <b> ${element["title"]} </b>
+            </button>
+        </h2>
+    </div>
+
+    <div id="collapseOne" class="collapse show" aria-labelledby="headingOne"
+        data-parent="#accordionExample">
+        <div class="card-body"> ${element["content"]}
+        <a target = "blank" href= "${element["url"]}">  Read more </a>
+        </div>
+    </div>
+</div>`
+            newshtml += news;
+        });
+        newsaccordion.innerHTML = newshtml;
+    }
+    else {
+        console.log('some error has been occured')
+    }
+
+}
+xhr.send();
+
+// tech  
+let technewsbtn = document.getElementById('tech-news')
+technewsbtn.addEventListener('click', technewsbtnhandler);
+function technewsbtnhandler() {
+const xhr = new XMLHttpRequest();
+xhr.open('GET', 'https://gnews.io/api/v4/search?q=tech&token=bdd660b70149c8ad41a9b83309f668eb', true)
+xhr.getResponseHeader('content-type', 'application/json')
+xhr.onprogress = function () {
+    console.log('on progress')
+}
+xhr.onload = function () {
+    if (this.status === 200) {
+        let json = JSON.parse(this.responseText);
+        let newshtml = "";
+        let articles = json.articles
+        console.log(articles);
+        articles.forEach(function (element , index) {
+
+
+            // console.log(json.articles);
+
+            let news = `<div class="accordion" id="newsaccordion">
+<div class="card">
+    <div class="card-header" id="headingOne" style="background-color:;>
+        <h2 class="mb-0">
+            <button class="btn btn-link btn-block text-left" type="button" data-toggle="collapse" style = "text-decoration: none; font-size:18px;"
+                data-target="#collapse${index}" aria-expanded="true" aria-controls="collapse${index}">
+                <b> ${element["title"]} </b>
+            </button>
+        </h2>
+    </div>
+
+    <div id="collapseOne" class="collapse show" aria-labelledby="headingOne"
+        data-parent="#accordionExample">
+        <div class="card-body"> ${element["content"]}
+        <a target = "blank" href= "${element["url"]}">  Read more </a>
+        </div>
+    </div>
+</div>`
+            newshtml += news;
+        });
+        newsaccordion.innerHTML = newshtml;
+    }
+    else {
+        console.log('some error has been occured')
+    }
+
+}
+xhr.send();
+    
+    
+}
+// iddian news start here
+let indiannewsbtn = document.getElementById('indian-news')
+indiannewsbtn.addEventListener('click', indiannewsbtnhandler);
+function indiannewsbtnhandler() {
+    
+const xhr = new XMLHttpRequest();
+xhr.open('GET', 'https://gnews.io/api/v4/search?q=indian&token=bdd660b70149c8ad41a9b83309f668eb', true)
+xhr.getResponseHeader('content-type', 'application/json')
+xhr.onprogress = function () {
+    console.log('on progress')
+}
+xhr.onload = function () {
+    if (this.status === 200) {
+        let json = JSON.parse(this.responseText);
+        let newshtml = "";
+        let articles = json.articles
+        console.log(articles);
+        articles.forEach(function (element , index) {
+
+
+            // console.log(json.articles);
+
+            let news = `<div class="accordion" id="newsaccordion">
+<div class="card">
+    <div class="card-header" id="headingOne" style="background-color:;>
+        <h2 class="mb-0">
+            <button class="btn btn-link btn-block text-left" type="button" data-toggle="collapse" style = "text-decoration: none; font-size:18px;"
+                data-target="#collapse${index}" aria-expanded="true" aria-controls="collapse${index}">
+                <b> ${element["title"]} </b>
+            </button>
+        </h2>
+    </div>
+
+    <div id="collapseOne" class="collapse show" aria-labelledby="headingOne"
+        data-parent="#accordionExample">
+        <div class="card-body"> ${element["content"]}
+        <a target = "blank" href= "${element["url"]}">  Read more </a>
+        </div>
+    </div>
+</div>`
+            newshtml += news;
+        });
+        newsaccordion.innerHTML = newshtml;
+    }
+    else {
+        console.log('some error has been occured')
+    }
+
+}
+xhr.send();
+    
+    
+}
+//economics
+let economicsbtn = document.getElementById('economics')
+economicsbtn.addEventListener('click', economicsbtnhandler);
+function economicsbtnhandler() {
+    
+const xhr = new XMLHttpRequest();
+xhr.open('GET', 'https://gnews.io/api/v4/search?q=economic&token=bdd660b70149c8ad41a9b83309f668eb', true)
+xhr.getResponseHeader('content-type', 'application/json')
+xhr.onprogress = function () {
+    console.log('on progress')
+}
+xhr.onload = function () {
+    if (this.status === 200) {
+        let json = JSON.parse(this.responseText);
+        let newshtml = "";
+        let articles = json.articles
+        console.log(articles);
+        articles.forEach(function (element , index) {
+
+
+            // console.log(json.articles);
+
+            let news = `<div class="accordion" id="newsaccordion">
+<div class="card">
+    <div class="card-header" id="headingOne" style="background-color:;>
+        <h2 class="mb-0">
+            <button class="btn btn-link btn-block text-left" type="button" data-toggle="collapse" style = "text-decoration: none; font-size:18px;"
+                data-target="#collapse${index}" aria-expanded="true" aria-controls="collapse${index}">
+                <b> ${element["title"]} </b>
+            </button>
+        </h2>
+    </div>
+
+    <div id="collapseOne" class="collapse show" aria-labelledby="headingOne"
+        data-parent="#accordionExample">
+        <div class="card-body"> ${element["content"]}
+        <a target = "blank" href= "${element["url"]}">  Read more </a>
+        </div>
+    </div>
+</div>`
+            newshtml += news;
+        });
+        newsaccordion.innerHTML = newshtml;
+    }
+    else {
+        console.log('some error has been occured')
+    }
+
+}
+xhr.send();
+    }
+
+let businessbtn = document.getElementById('business')
+businessbtn.addEventListener('click', businessbtnhandler);
+ function businessbtnhandler() {
+     
+ const xhr = new XMLHttpRequest();
+ xhr.open('GET', 'https://gnews.io/api/v4/search?q=business&token=bdd660b70149c8ad41a9b83309f668eb', true)
+ xhr.getResponseHeader('content-type', 'application/json')
+ xhr.onprogress = function () {
+     console.log('on progress')
+ }
+ xhr.onload = function () {
+     if (this.status === 200) {
+         let json = JSON.parse(this.responseText);
+         let newshtml = "";
+         let articles = json.articles
+         console.log(articles);
+         articles.forEach(function (element , index) {
+ 
+ 
+             // console.log(json.articles);
+ 
+             let news = `<div class="accordion" id="newsaccordion">
+ <div class="card">
+     <div class="card-header" id="headingOne" style="background-color:;>
+         <h2 class="mb-0">
+             <button class="btn btn-link btn-block text-left" type="button" data-toggle="collapse" style = "text-decoration: none; font-size:18px;"
+                 data-target="#collapse${index}" aria-expanded="true" aria-controls="collapse${index}">
+                 <b> ${element["title"]} </b>
+             </button>
+         </h2>
+     </div>
+ 
+     <div id="collapseOne" class="collapse show" aria-labelledby="headingOne"
+         data-parent="#accordionExample">
+         <div class="card-body"> ${element["content"]}
+         <a target = "blank" href= "${element["url"]}">  Read more </a>
+         </div>
+     </div>
+ </div>`
+             newshtml += news;
+         });
+         newsaccordion.innerHTML = newshtml;
+     }
+     else {
+         console.log('some error has been occured')
+     }
+ 
+ }
+ xhr.send();  
+}
+
+let sportsbtn = document.getElementById('sports')
+sportsbtn.addEventListener('click', sportsbtnhandler);
+ function sportsbtnhandler() {
+     
+ const xhr = new XMLHttpRequest();
+ xhr.open('GET', 'https://gnews.io/api/v4/search?q=sports&token=bdd660b70149c8ad41a9b83309f668eb', true)
+ xhr.getResponseHeader('content-type', 'application/json')
+ xhr.onprogress = function () {
+     console.log('on progress')
+ }
+ xhr.onload = function () {
+     if (this.status === 200) {
+         let json = JSON.parse(this.responseText);
+         let newshtml = "";
+         let articles = json.articles
+         console.log(articles);
+         articles.forEach(function (element , index) {
+ 
+ 
+             // console.log(json.articles);
+ 
+             let news = `<div class="accordion" id="newsaccordion">
+ <div class="card">
+     <div class="card-header" id="headingOne" style="background-color:;>
+         <h2 class="mb-0">
+             <button class="btn btn-link btn-block text-left" type="button" data-toggle="collapse" style = "text-decoration: none; font-size:18px;"
+                 data-target="#collapse${index}" aria-expanded="true" aria-controls="collapse${index}">
+                 <b> ${element["title"]} </b>
+             </button>
+         </h2>
+     </div>
+ 
+     <div id="collapseOne" class="collapse show" aria-labelledby="headingOne"
+         data-parent="#accordionExample">
+         <div class="card-body"> ${element["content"]}
+         <a target = "blank" href= "${element["url"]}">  Read more </a>
+         </div>
+     </div>
+ </div>`
+             newshtml += news;
+         });
+         newsaccordion.innerHTML = newshtml;
+     }
+     else {
+         console.log('some error has been occured')
+     }
+ 
+ }
+ xhr.send();  
+}
+
+let entbtn = document.getElementById('ent')
+entbtn.addEventListener('click', entbtnhandler);
+ function entbtnhandler() {
+     
+ const xhr = new XMLHttpRequest();
+ xhr.open('GET', 'https://gnews.io/api/v4/search?q=entertainment&token=bdd660b70149c8ad41a9b83309f668eb', true)
+ xhr.getResponseHeader('content-type', 'application/json')
+ xhr.onprogress = function () {
+     console.log('on progress')
+ }
+ xhr.onload = function () {
+     if (this.status === 200) {
+         let json = JSON.parse(this.responseText);
+         let newshtml = "";
+         let articles = json.articles
+         console.log(articles);
+         articles.forEach(function (element , index) {
+ 
+ 
+             // console.log(json.articles);
+ 
+             let news = `<div class="accordion" id="newsaccordion">
+ <div class="card">
+     <div class="card-header" id="headingOne" style="background-color:;>
+         <h2 class="mb-0">
+             <button class="btn btn-link btn-block text-left" type="button" data-toggle="collapse" style = "text-decoration: none; font-size:18px;"
+                 data-target="#collapse${index}" aria-expanded="true" aria-controls="collapse${index}">
+                 <b> ${element["title"]} </b>
+             </button>
+         </h2>
+     </div>
+ 
+     <div id="collapseOne" class="collapse show" aria-labelledby="headingOne"
+         data-parent="#accordionExample">
+         <div class="card-body"> ${element["content"]}
+         <a target = "blank" href= "${element["url"]}">  Read more </a>
+         </div>
+     </div>
+ </div>`
+             newshtml += news;
+         });
+         newsaccordion.innerHTML = newshtml;
+     }
+     else {
+         console.log('some error has been occured')
+     }
+ 
+ }
+ xhr.send();  
+}
+    </script>
+</body>
+
+    
